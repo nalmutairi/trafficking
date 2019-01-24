@@ -125,7 +125,7 @@ class CompanyCreateSerializer(serializers.ModelSerializer):
 class DayCreateSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Day
-		exclude = ['company',]
+		fields = '__all__'
 
 # ----------------
 
