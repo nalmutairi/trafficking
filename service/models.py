@@ -35,7 +35,7 @@ class Slot(models.Model):
 
 
 class Appointment(models.Model):
-	user = models.ForeignKey(User, on_delete = models.CASCADE, related_name = 'user')
+	user = models.ForeignKey(User, on_delete = models.CASCADE, related_name = 'user', null=True, blank=True)
 	slot = models.ForeignKey(Slot, on_delete = models.CASCADE, related_name = 'app_slot')
 
 

@@ -144,6 +144,9 @@ class AppointmentCreateView(CreateAPIView):
 	serializer_class = AppointmentCreateSerializer
 	permission_classes = [IsAuthenticated]
 
+	def perform_create(self, serializer):
+		serializer.save(user=self.request.user)
+
 #=====================================================
 
 #============= UPDATE API ============================
