@@ -32,8 +32,6 @@ class Slot(models.Model):
 	end_time = models.TimeField()
 	is_available = models.BooleanField()
 
-	def __str__(self):
-		return "Day: %s, Start: %s, End: %s, Open: %s, Company: %s" % (self.day.name, self.start_time, self.end_time, self.is_available, self.day.company.name)
 
 
 class Appointment(models.Model):
@@ -43,5 +41,29 @@ class Appointment(models.Model):
 
 	def __str__(self):
 		return self.slot.day.company.name
+
+
+
+class Address(models.Model):
+	area = models.CharField(max_length = 100)
+	block = models.CharField(max_length = 5)
+	street = models.CharField(max_length = 50)
+	house = models.CharField(max_length = 5)
+	jaada = models.CharField(max_length = 5)
+
+
+	def __str__(self):
+		return self.area
+
+class Profile(models.Model):
+	user = models.OneToOneField(User, on_delete= models.CASCADE)
+	first_name = models.CharField(max_length = 100)
+	last_name = models.CharField(max_length = 100)
+	email = models.EmailField(unique = True)
+	address = models.ForeignKey(Address, on_delete= models.CASCADE)
+	phone = models.CharField(max_length = 15)
+
+
+	return self.first_name
 
 
