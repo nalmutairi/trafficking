@@ -63,7 +63,7 @@ class Profile(models.Model):
 	address = models.ForeignKey(Address, on_delete= models.CASCADE)
 	phone = models.CharField(max_length = 15)
 
-
-	return self.first_name
+	def __str__(self):
+		return self.first_name
 
 
