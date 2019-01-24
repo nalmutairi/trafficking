@@ -17,9 +17,17 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
+from service.views import UserCreateAPIView, UserLoginAPIView, UserDetailsAPIView, UsersListAPIView, UserDetailsAPIView
+from rest_framework_jwt.views import obtain_jwt_token
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('signup/', UserCreateAPIView.as_view(), name="signup"),
+    path('signin/',obtain_jwt_token, name="signin"),
+    path('user/',UsersListAPIView.as_view(), name="usersList"),
+    path('user_details/<int:user_id>/',UserDetailsAPIView.as_view(), name="userDetail")
+
+
 ]
 
 urlpatterns +=static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
