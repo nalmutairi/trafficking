@@ -18,8 +18,61 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 
+# ------- LIST / DETAIL API ---------------
+from service.views import (
+	CompanyListView, 
+	DayListView, 
+	SlotListView, 
+	AppointmentListView, 
+	CompanyDetailView, 
+	DayDetailView, 
+	SlotDetailView, 
+	AppointmentDetailView
+	)
+
+# ------- CREATE / UPDATE / DELETE API ----
+
+from service.views import (
+	CompanyCreateView,
+	DayCreateView,
+	SlotCreateView,
+	AppointmentCreateView,
+	CompanyUpdateView,
+	DayUpdateView,
+	SlotUpdateView,
+	AppointmentUpdateView,
+	CompanyDeleteView,
+	DayDeleteView,
+	SlotDeleteView,
+	AppointmentDeleteView
+	)
+
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('companylist/', CompanyListView.as_view(), name='companylist'),
+    path('daylist/', DayListView.as_view(), name='daylist'),
+    path('slotlist/', SlotListView.as_view(), name='slotlist'),
+    path('appointmentlist/', AppointmentListView.as_view(), name='appointmentlist'),
+    path('companydetail/<companydetail_id>', CompanyDetailView.as_view(), name='companydetail'),
+    path('daydetail/<daydetail_id>', DayDetailView.as_view(), name='daydetail'),
+    path('slotdetail/<slotdetail_id>', SlotDetailView.as_view(), name='slotdetail'),
+    path('appointmentdetail/<appointmentdetail_id>', AppointmentDetailView.as_view(), name='appointmentdetail'),
+    path('companycreate/', CompanyCreateView.as_view(), name='companycreate'),
+    path('daycreate/', DayCreateView.as_view(), name='daycreate'),
+    path('slotcreate/', SlotCreateView.as_view(), name='slotcreate'),
+    path('appointmentcreate/', AppointmentCreateView.as_view(), name='appointmentcreate'),
+    path('companyupdate/<companyupdate_id>', CompanyUpdateView.as_view(), name='companyupdate'),
+    path('dayupdate/<dayupdate_id>', DayUpdateView.as_view(), name='dayupdate'),
+    path('slotupdate/<slotupdate_id>', SlotUpdateView.as_view(), name='slotupdate'),
+    path('appointmentupdate/<appointmentupdate_id>', AppointmentUpdateView.as_view(), name='appointmentupdate'),
+    path('companydelete/<companydelete_id>', CompanyDeleteView.as_view(), name='companydelete'),
+    path('daydelete/<daydelete_id>', DayDeleteView.as_view(), name='daydelete'),
+    path('slotdelete/<slotdelete_id>', SlotDeleteView.as_view(), name='slotdelete'),
+    path('appointmentdelete/<appointmentdelete_id>', AppointmentDeleteView.as_view(), name='appointmentdelete'),
+
+
 ]
 
 urlpatterns +=static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
