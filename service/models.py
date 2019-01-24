@@ -1,9 +1,10 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 
 
-class User(AbstractUser):
-	pass
+
+# class User(AbstractUser):
+# 	pass
 
 class Company(models.Model):
 	name = models.CharField(max_length = 100)
@@ -42,6 +43,7 @@ class Appointment(models.Model):
 		return self.slot.day.company.name
 
 
+
 class Address(models.Model):
 	area = models.CharField(max_length = 100)
 	block = models.CharField(max_length = 5)
@@ -63,4 +65,5 @@ class Profile(models.Model):
 
 
 	return self.first_name
+
 

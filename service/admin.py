@@ -3,8 +3,6 @@ from django.contrib.auth import get_user_model
 from .models import Company, Slot, Day, Appointment
 User = get_user_model()
 
-
-
 class SlotAdmin(admin.ModelAdmin):
 	list_display = ['day__name', 'start_time']
 admin.site.register(Company)
