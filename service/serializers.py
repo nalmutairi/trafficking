@@ -139,7 +139,7 @@ class SlotCreateSerializer(serializers.ModelSerializer):
 class AppointmentCreateSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Appointment
-		exclude = 'user'
+		exclude = ['user',]
 #==========================================================
 #==========================================================
 
