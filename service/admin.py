@@ -1,7 +1,7 @@
 from django.contrib import admin
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from .models import Company, Slot, Day, Appointment
-User = get_user_model()
+
 
 class SlotAdmin(admin.ModelAdmin):
 	list_display = ['day__name', 'start_time']
