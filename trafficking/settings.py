@@ -40,7 +40,7 @@ DEBUG = False
 if DEBUG:
 	ALLOWED_HOSTS = []
 else:
-	ALLOWED_HOSTS = ['104.248.39.210']
+	ALLOWED_HOSTS = ['104.248.38.127']
 
 
 # Application definition
@@ -104,7 +104,7 @@ else:
 			'ENGINE': 'django.db.backends.postgresql_psycopg2',
 			'NAME': 'django',
 			'USER': 'django',
-			'PASSWORD': 'd5a296f0dccb4dd04809ed88e9931d08',
+			'PASSWORD': 'aa2b0df8366cc150c7ff4b298f9e18dc',
 			'HOST': 'localhost',
 			'PORT': '',
 		}
