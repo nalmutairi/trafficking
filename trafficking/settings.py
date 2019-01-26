@@ -31,7 +31,7 @@ SECRET_KEY = '-gx0b%rq#x27he3h2zk0_v+ym01dcs4cf9l7_4)+cz+o_!&9x='
 TURN DEBUG "FALSE" TO USE ONLINE, AND DEBUG "TRUE" TO USE LOCALLY
 IF CONDITIONS ARE ALREADY PROVIDED FOR ALLOWED HOSTS AND DATABASE
 """
-DEBUG = True
+DEBUG = False
 
 # ========================================================================================
 
