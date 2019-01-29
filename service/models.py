@@ -8,43 +8,58 @@ from django.contrib.auth.models import User
 
 class Company(models.Model):
 	name = models.CharField(max_length = 100)
-	category = models.CharField(max_length = 100)
+	categorystuff = models.CharField(max_length = 100)
 	desc = models.TextField()
 	logo = models.ImageField()
+	slogan = models.CharField(max_length = 300, blank = True, null = True)
 
 
 	def __str__(self):
 		return self.name
 
 
+class Category(models.Model):
+	company = models.ForeignKey(Company, on_delete= models.CASCADE)
+	name = models.CharField(max_length = 100)
+
+
 class Day(models.Model):
 	name = models.DateField()
 	opening_time = models.TimeField()
 	closing_time = models.TimeField()
-	company = models.ForeignKey(Company, on_delete= models.CASCADE, related_name = 'company')
+	company = models.ForeignKey(Company, on_delete= models.CASCADE, related_name = 'days')
 
 	def __str__(self):
 		return "Day: %s, Company: %s" % (self.name, self.company.name)
 
 class Slot(models.Model):
-	day = models.ForeignKey(Day, on_delete= models.CASCADE)
+	day = models.ForeignKey(Day, on_delete= models.CASCADE, related_name='slots')
 	start_time = models.TimeField()
 	end_time = models.TimeField()
 	is_available = models.BooleanField()
 
 
-
 class Appointment(models.Model):
-	user = models.ForeignKey(User, on_delete = models.CASCADE, related_name = 'user', null=True, blank=True)
-	slot = models.ForeignKey(Slot, on_delete = models.CASCADE, related_name = 'app_slot')
-
+	user = models.ForeignKey(User, on_delete = models.CASCADE, related_name = 'appointments', null=True, blank=True)
+	slot = models.OneToOneField(Slot, on_delete = models.CASCADE)
 
 	def __str__(self):
 		return self.slot.day.company.name
 
 
+class Profile(models.Model):
+	user = models.OneToOneField(User, on_delete= models.CASCADE)
+	first_name = models.CharField(max_length = 100)
+	last_name = models.CharField(max_length = 100)
+	email = models.EmailField(unique = True)
+	phone = models.CharField(max_length = 15)
+
+	def __str__(self):
+		return self.first_name
+
 
 class Address(models.Model):
+	profile = models.ForeignKey(Profile, on_delete= models.CASCADE, related_name='addresses')
 	area = models.CharField(max_length = 100)
 	block = models.CharField(max_length = 5)
 	street = models.CharField(max_length = 50)
@@ -54,16 +69,5 @@ class Address(models.Model):
 
 	def __str__(self):
 		return self.area
-
-class Profile(models.Model):
-	user = models.OneToOneField(User, on_delete= models.CASCADE)
-	first_name = models.CharField(max_length = 100)
-	last_name = models.CharField(max_length = 100)
-	email = models.EmailField(unique = True)
-	address = models.ForeignKey(Address, on_delete= models.CASCADE)
-	phone = models.CharField(max_length = 15)
-
-	def __str__(self):
-		return self.first_name
 
 

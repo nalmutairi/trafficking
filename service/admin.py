@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Company, Slot, Day, Appointment
+from .models import Company, Slot, Day, Appointment, Profile
 
 
 class SlotAdmin(admin.ModelAdmin):
@@ -8,5 +8,6 @@ admin.site.register(Company)
 admin.site.register(Slot, SlotAdmin)
 admin.site.register(Day)
 admin.site.register(Appointment)
+admin.site.register(Profile)
 
 

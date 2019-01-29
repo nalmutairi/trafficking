@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from service.models import Company, Day, Slot, Appointment
+from service.models import Company, Day, Slot, Appointment, Profile, Category, Address
 
 from django.contrib.auth.models import User
 
@@ -30,42 +30,12 @@ class CompanyListSerializer(serializers.ModelSerializer):
 		lookup_url_kwarg = 'companydetail_id'
 		)
 
-	slogan = serializers.SerializerMethodField()
-
 	class Meta:
 		model = Company
-		fields = ['name', 'logo', 'detail', 'slogan',]
+		fields = ['id', 'name', 'logo', 'categorystuff', 'detail']
 
-	def get_slogan(self, obj):
-		return "anything"
 
 # -----------------------
-
-class DayListSerializer(serializers.ModelSerializer):
-	detail = serializers.HyperlinkedIdentityField(
-		view_name = 'daydetail',
-		lookup_field = 'id',
-		lookup_url_kwarg = 'daydetail_id'
-		)
-
-	class Meta:
-		model = Day
-		fields = ['company', 'name', 'detail',]
-
-# ------------------------
-
-class SlotListSerializer(serializers.ModelSerializer):
-	detail = serializers.HyperlinkedIdentityField(
-		view_name = 'slotdetail',
-		lookup_field = 'id',
-		lookup_url_kwarg = 'slotdetail_id'
-		)
-
-	class Meta:
-		model = Slot
-		fields = ['day', 'is_available', 'detail',]
-
-# ------------------------
 
 class AppointmentListSerializer(serializers.ModelSerializer):
 	detail = serializers.HyperlinkedIdentityField(
@@ -85,23 +55,24 @@ class AppointmentListSerializer(serializers.ModelSerializer):
 
 
 #================== DETAIL SERIALIZERS ====================
-class CompanyDetailSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = Company
-		fields = '__all__'
-
-# ------------------
-
-class DayDetailSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = Day
-		fields = '__all__'
-
-# ----------------
 
 class SlotDetailSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Slot
+		fields = '__all__'
+
+
+class DayDetailSerializer(serializers.ModelSerializer):
+	slots = SlotDetailSerializer(many=True)
+	class Meta:
+		model = Day
+		fields = '__all__'
+
+
+class CompanyDetailSerializer(serializers.ModelSerializer):
+	days = DayDetailSerializer(many = True)
+	class Meta:
+		model = Company
 		fields = '__all__'
 
 # ----------------
@@ -109,6 +80,12 @@ class SlotDetailSerializer(serializers.ModelSerializer):
 class AppointmentDetailSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Appointment
+		fields = '__all__'
+
+
+class AddressDetailSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Address
 		fields = '__all__'
 #==========================================================
 #==========================================================
@@ -141,14 +118,30 @@ class AppointmentCreateSerializer(serializers.ModelSerializer):
 		model = Appointment
 		exclude = ['user',]
 
+
+class AddressCreateSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Address
+		exclude = ['profile',]
+
+class ProfileCreateSerializer(serializers.ModelSerializer):
+	address = AddressCreateSerializer(required = False)
+	class Meta:
+		model = Profile
+		exclude = ['user', ]
+
+
+
+
 #==========================================================
 #==========================================================
 
 class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
+
     class Meta:
         model = User
-        fields = ['username', 'password']
+        fields = ['username', 'password', 'profile']
 
     def create(self, validated_data):
         username = validated_data['username']
@@ -178,19 +171,17 @@ class UserLoginSerializer(serializers.Serializer):
 
         return data
 
-class UserListSerializer(serializers.ModelSerializer):
-    details = serializers.HyperlinkedIdentityField(
-        view_name = "userDetail",
-        lookup_field = "id",
-        lookup_url_kwarg = "user_id"
-        )
 
-    class Meta:
-        model = User
-        fields = ['username' , 'details']
+class ProfileDetailSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Profile
+		fields = '__all__'
 
-class UserDataSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        exclude = ['password']
+
+class CategoryListSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Category
+		fields = '__all__'
+
+
 

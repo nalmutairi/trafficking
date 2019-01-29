@@ -31,16 +31,10 @@ SECRET_KEY = '-gx0b%rq#x27he3h2zk0_v+ym01dcs4cf9l7_4)+cz+o_!&9x='
 TURN DEBUG "FALSE" TO USE ONLINE, AND DEBUG "TRUE" TO USE LOCALLY
 IF CONDITIONS ARE ALREADY PROVIDED FOR ALLOWED HOSTS AND DATABASE
 """
-DEBUG = False
+DEBUG = True
 
 # ========================================================================================
-
-
-
-if DEBUG:
-	ALLOWED_HOSTS = []
-else:
-	ALLOWED_HOSTS = ['104.248.38.127']
+ALLOWED_HOSTS = ['127.0.0.1', '104.248.38.127']
 
 
 # Application definition

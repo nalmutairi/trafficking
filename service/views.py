@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from rest_framework.generics import ListAPIView, CreateAPIView , RetrieveAPIView, ListAPIView
-from .serializers import UserCreateSerializer, UserLoginSerializer, UserDataSerializer, UserListSerializer
+from .serializers import (
+	UserCreateSerializer, 
+	UserLoginSerializer,  
+	CategoryListSerializer)
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
@@ -21,19 +24,21 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 
 
 # ===================== My Models ===============
-from service.models import Company, Day, Slot, Appointment
+from service.models import Company, Day, Slot, Appointment, Category, Profile, Address
 # ===============================================
 
 # ===================== My Serializers (LIST / DETAIL)===============
 from .serializers import (
-	CompanyListSerializer, 
-	DayListSerializer, 
-	SlotListSerializer, 
+	CompanyListSerializer,  
 	AppointmentListSerializer, 
 	CompanyDetailSerializer, 
 	DayDetailSerializer, 
 	SlotDetailSerializer, 
-	AppointmentDetailSerializer
+	AppointmentDetailSerializer,
+	ProfileDetailSerializer,
+	ProfileCreateSerializer,
+	AddressCreateSerializer, 
+	AddressDetailSerializer
 	)
 # =======================My Serializers (CREATE)=====================
 from .serializers import (
@@ -56,21 +61,6 @@ class CompanyListView(ListAPIView):
 
 # --------------------
 
-class DayListView(ListAPIView):
-	queryset = Day.objects.all()
-	serializer_class = DayListSerializer
-	permission_classes = [AllowAny]
-	filter_backends = [SearchFilter, OrderingFilter]
-	search_fields = ['company',]
-
-# --------------------
-
-class SlotListView(ListAPIView):
-	queryset = Slot.objects.all()
-	serializer_class = SlotListSerializer
-	permission_classes = [AllowAny]
-	filter_backends = [SearchFilter, OrderingFilter]
-	search_fields = ['day',]
 
 # --------------------
 
@@ -80,6 +70,15 @@ class AppointmentListView(ListAPIView):
 	permission_classes = [AllowAny]
 	filter_backends = [SearchFilter, OrderingFilter]
 	search_fields = ['user',]
+
+
+# --------------------
+class CategoryListView(ListAPIView):
+	queryset = Category.objects.all()
+	serializer_class = CategoryListSerializer
+	permission_classes = [AllowAny]
+
+
 #=====================================================
 
 
@@ -118,6 +117,23 @@ class AppointmentDetailView(RetrieveAPIView):
 	permission_classes = [AllowAny]
 	lookup_field = 'id'
 	lookup_url_kwarg = 'appointmentdetail_id'
+
+
+class ProfileDetailView(RetrieveAPIView):
+	queryset = Profile.objects.all()
+	serializer_class = ProfileDetailSerializer
+	permission_classes = [AllowAny]
+	lookup_field = 'id'
+	lookup_url_kwarg = 'profile_id'
+
+
+class AddressDetailView(RetrieveAPIView):
+	queryset = Address.objects.all()
+	serializer_class = AddressDetailSerializer
+	permission_classes = [AllowAny]
+	lookup_field = 'id'
+	lookup_url_kwar= 'address_id'
+
 #=====================================================
 
 
@@ -147,6 +163,22 @@ class AppointmentCreateView(CreateAPIView):
 	def perform_create(self, serializer):
 		serializer.save(user=self.request.user)
 
+
+class ProfileCreateView(CreateAPIView):
+	serializer_class = ProfileCreateSerializer
+	permission_classes = [AllowAny]
+
+	def perform_create(self, serializer):
+		serializer.save(user = self.request.user)
+
+class AddressCreateView(CreateAPIView):
+	serializer_class = AddressCreateSerializer
+	permission_classes = [AllowAny]
+
+	def perform_create(self,serializer):
+		serializer.save(profile = self.request.user.profile)
+
+
 #=====================================================
 
 #============= UPDATE API ============================
@@ -172,6 +204,13 @@ class SlotUpdateView(RetrieveUpdateAPIView):
 	lookup_field = 'id'
 	lookup_url_kwarg = 'slotupdate_id'
 
+
+class ProfileUpdateView(RetrieveUpdateAPIView):
+	queryset = Profile.objects.all()
+	serializer_class = ProfileCreateSerializer
+	lookup_field = 'id'
+	lookup_url_kwarg = 'profile_id'
+
 # -----------------
 
 class AppointmentUpdateView(RetrieveUpdateAPIView):
@@ -181,6 +220,11 @@ class AppointmentUpdateView(RetrieveUpdateAPIView):
 	lookup_url_kwarg = 'appointmentupdate_id'
 
 
+class AddressUpdateView(RetrieveUpdateAPIView):
+	queryset = Address.objects.all()
+	serializer_class = AddressCreateSerializer
+	lookup_field = 'id'
+	lookup_url_kwarg = 'address_id'
 
 #=====================================================
 
@@ -194,21 +238,21 @@ class CompanyDeleteView(DestroyAPIView):
 
 # ------------------
 
-class DayDeleteView(DestroyAPIView):
-	queryset = Day.objects.all()
-	serializer_class = DayListSerializer
-	lookup_field = 'id'
-	lookup_url_kwarg = 'daydelete_id'
-	permission_classes = [IsAuthenticated]
+# class DayDeleteView(DestroyAPIView):
+# 	queryset = Day.objects.all()
+# 	serializer_class = DayListSerializer
+# 	lookup_field = 'id'
+# 	lookup_url_kwarg = 'daydelete_id'
+# 	permission_classes = [IsAuthenticated]
 
 # ------------------
 
-class SlotDeleteView(DestroyAPIView):
-	queryset = Slot.objects.all()
-	serializer_class = SlotListSerializer
-	lookup_field = 'id'
-	lookup_url_kwarg = 'slotdelete_id'
-	permission_classes = [IsAuthenticated]
+# class SlotDeleteView(DestroyAPIView):
+# 	queryset = Slot.objects.all()
+# 	serializer_class = SlotListSerializer
+# 	lookup_field = 'id'
+# 	lookup_url_kwarg = 'slotdelete_id'
+# 	permission_classes = [IsAuthenticated]
 
 # ------------------
 
@@ -237,15 +281,4 @@ class UserLoginAPIView(APIView):
         return Response(serializer.errors, HTTP_400_BAD_REQUEST)
 
 
-class UsersListAPIView(ListAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserListSerializer
-    permission_classes = [IsAdminUser]
-
-class UserDetailsAPIView(RetrieveAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserDataSerializer
-    lookup_field = 'id'
-    lookup_url_kwarg = 'user_id'
-    permission_classes = [IsAuthenticated ,IsAdminUser]
 
