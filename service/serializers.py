@@ -1,6 +1,11 @@
 from rest_framework import serializers
 
-from service.models import Company, Day, Slot, Appointment, Profile, Category, Address
+from service.models import (
+	Category,
+	Company, 
+	Day, 
+	Slot, 
+	Address)
 
 from django.contrib.auth.models import User
 
@@ -19,48 +24,31 @@ from django.contrib.auth.models import User
 # 		return validated_data
 
 
-# check the below codes
-
-
-#================== LIST SERIALIZERS ======================
-class CompanyListSerializer(serializers.ModelSerializer):
-	detail = serializers.HyperlinkedIdentityField(
-		view_name = 'companydetail',
-		lookup_field = 'id',
-		lookup_url_kwarg = 'companydetail_id'
-		)
-
+class CategoryListSerializer(serializers.ModelSerializer):
 	class Meta:
-		model = Company
-		fields = ['id', 'name', 'logo', 'categorystuff', 'detail']
-
-
-# -----------------------
-
-class AppointmentListSerializer(serializers.ModelSerializer):
-	detail = serializers.HyperlinkedIdentityField(
-		view_name = 'appointmentdetail',
-		lookup_field = 'id',
-		lookup_url_kwarg = 'appointmentdetail_id'
-		)
-
-	class Meta:
-		model = Appointment
-		fields = ['user', 'slot', 'detail',]
-
-
-#==========================================================
-#==========================================================
-
-
-
-#================== DETAIL SERIALIZERS ====================
-
-class SlotDetailSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = Slot
+		model = Category
 		fields = '__all__'
 
+
+class CompanyListSerializer(serializers.ModelSerializer):
+	category = serializers.SerializerMethodField()
+	class Meta: 
+		model = Company
+		fields = '__all__'
+
+
+	def get_category(self, obj):
+		return obj.category.name
+
+
+class SlotDetailSerializer(serializers.ModelSerializer):
+	date = serializers.SerializerMethodField()
+	class Meta:
+		model = Slot
+		exclude = ['day' ,]
+
+	def get_date(self, obj):
+		return obj.day.name
 
 class DayDetailSerializer(serializers.ModelSerializer):
 	slots = SlotDetailSerializer(many=True)
@@ -68,18 +56,10 @@ class DayDetailSerializer(serializers.ModelSerializer):
 		model = Day
 		fields = '__all__'
 
-
 class CompanyDetailSerializer(serializers.ModelSerializer):
 	days = DayDetailSerializer(many = True)
 	class Meta:
 		model = Company
-		fields = '__all__'
-
-# ----------------
-
-class AppointmentDetailSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = Appointment
 		fields = '__all__'
 
 
@@ -87,61 +67,28 @@ class AddressDetailSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Address
 		fields = '__all__'
-#==========================================================
-#==========================================================
 
 
-#================== CREATE SERIALIZERS ====================
-class CompanyCreateSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = Company
-		fields = '__all__'
-
-# ----------------
-
-class DayCreateSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = Day
-		fields = '__all__'
-
-# ----------------
-
+## used for slot update view 
 class SlotCreateSerializer(serializers.ModelSerializer):
-	class Meta:
+	class Meta: 
 		model = Slot
-		fields = '__all__'
-
-# ----------------
-
-class AppointmentCreateSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = Appointment
-		exclude = ['user',]
+		exclude = ['user', ]
 
 
 class AddressCreateSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Address
-		exclude = ['profile',]
-
-class ProfileCreateSerializer(serializers.ModelSerializer):
-	address = AddressCreateSerializer(required = False)
-	class Meta:
-		model = Profile
 		exclude = ['user', ]
 
 
-
-
-#==========================================================
-#==========================================================
 
 class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
-        fields = ['username', 'password', 'profile']
+        fields = ['username', 'password']
 
     def create(self, validated_data):
         username = validated_data['username']
@@ -170,18 +117,6 @@ class UserLoginSerializer(serializers.Serializer):
             raise serializers.ValidationError("Incorrect username/password")
 
         return data
-
-
-class ProfileDetailSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = Profile
-		fields = '__all__'
-
-
-class CategoryListSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = Category
-		fields = '__all__'
 
 
 

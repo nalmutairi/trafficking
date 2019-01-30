@@ -23,82 +23,43 @@ from service.views import (
     )
 from rest_framework_jwt.views import obtain_jwt_token
 
-# ------- LIST / DETAIL API ---------------
 from service.views import (
-	CompanyListView, 
-	AppointmentListView, 
-	CompanyDetailView, 
-	DayDetailView, 
-	SlotDetailView, 
-	AppointmentDetailView,
+    UserCreateAPIView,
+    UserLoginAPIView,
+
     CategoryListView,
-    ProfileDetailView,
-    ProfileCreateView,
-    ProfileUpdateView,
+
+    CompanyListView, 
+    CompanyDetailView,
+
     AddressDetailView,
     AddressCreateView,
-    AddressUpdateView
-	)
 
-# ------- CREATE / UPDATE / DELETE API ----
+    DayDetailView,
 
-from service.views import (
-	CompanyCreateView,
-	DayCreateView,
-	SlotCreateView,
-	AppointmentCreateView,
-	CompanyUpdateView,
-	DayUpdateView,
-	SlotUpdateView,
-	AppointmentUpdateView,
-	CompanyDeleteView,
+    SlotUpdateView
 
-	AppointmentDeleteView
-	)
-
-
+    )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('companylist/', CompanyListView.as_view(), name='companylist'),
-    # path('daylist/', DayListView.as_view(), name='daylist'),
-    # path('slotlist/', SlotListView.as_view(), name='slotlist'),
-    path('appointmentlist/', AppointmentListView.as_view(), name='appointmentlist'),
-    path('companydetail/<companydetail_id>', CompanyDetailView.as_view(), name='companydetail'),
-    path('daydetail/<daydetail_id>', DayDetailView.as_view(), name='daydetail'),
-    path('slotdetail/<slotdetail_id>', SlotDetailView.as_view(), name='slotdetail'),
-    path('appointmentdetail/<appointmentdetail_id>', AppointmentDetailView.as_view(), name='appointmentdetail'),
-    path('companycreate/', CompanyCreateView.as_view(), name='companycreate'),
-    path('daycreate/', DayCreateView.as_view(), name='daycreate'),
-    path('slotcreate/', SlotCreateView.as_view(), name='slotcreate'),
-    path('appointmentcreate/', AppointmentCreateView.as_view(), name='appointmentcreate'),
-    path('companyupdate/<companyupdate_id>', CompanyUpdateView.as_view(), name='companyupdate'),
-    path('dayupdate/<dayupdate_id>', DayUpdateView.as_view(), name='dayupdate'),
-    path('slotupdate/<slotupdate_id>', SlotUpdateView.as_view(), name='slotupdate'),
-    path('appointmentupdate/<appointmentupdate_id>', AppointmentUpdateView.as_view(), name='appointmentupdate'),
-    path('companydelete/<companydelete_id>', CompanyDeleteView.as_view(), name='companydelete'),
-    # path('daydelete/<daydelete_id>', DayDeleteView.as_view(), name='daydelete'),
-    # path('slotdelete/<slotdelete_id>', SlotDeleteView.as_view(), name='slotdelete'),
-    path('appointmentdelete/<appointmentdelete_id>', AppointmentDeleteView.as_view(), name='appointmentdelete'),
 
+    path('category/list/', CategoryListView.as_view(), name = 'category-list'),
 
-    path('categorylist', CategoryListView.as_view(), name = 'categorylist'),
-    path('profiledetail/<profile_id>', ProfileDetailView.as_view(), name = 'profiledetail'),
-    path('profilecreate/', ProfileCreateView.as_view(), name = 'profilecreate'),
-    path('profileupdate/<profile_id>', ProfileUpdateView.as_view(), name = 'profileupdate'),
+    path('company/list/', CompanyListView.as_view(), name ='company-list'),
+    path('company/detail/<int:company_id>', CompanyDetailView.as_view(), name = 'company-detail'),
 
-    path('addressdetail/<address_id>', AddressDetailView.as_view(), name = 'addressdetail'),
-    path('addressupdate/<address_id>' , AddressUpdateView.as_view(), name = 'addressupdate'),
-    path('addresscreate', AddressCreateView.as_view(), name = 'addresscreate'),
+    path('slot/<int:slot_id>/update', SlotUpdateView.as_view(), name = 'slot-update'),
+
+    path('address/detail/<int:address_id>', AddressDetailView.as_view(), name = 'address-detail'),
+    path('address/create/', AddressCreateView.as_view(), name = 'address-create'),
+
+    path('day/detail/<int:day_id>', DayDetailView.as_view(), name = 'day-detail'),
 
     path('signup/', UserCreateAPIView.as_view(), name="signup"),
     path('signin/',obtain_jwt_token, name="signin"),
-    # path('user/',UsersListAPIView.as_view(), name="usersList"),
-    # path('user_details/<int:user_id>/',UserDetailsAPIView.as_view(), name="userDetail")
+    ]
 
-
-
-]
 
 urlpatterns +=static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns+=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
