@@ -34,9 +34,11 @@ from service.views import (
 
     AddressDetailView,
     AddressCreateView,
+    AddressListView,
 
     DayDetailView,
 
+    SlotListView,
     SlotUpdateView
 
     )
@@ -47,14 +49,16 @@ urlpatterns = [
     path('category/list/', CategoryListView.as_view(), name = 'category-list'),
 
     path('company/list/', CompanyListView.as_view(), name ='company-list'),
-    path('company/detail/<int:company_id>', CompanyDetailView.as_view(), name = 'company-detail'),
+    path('company/detail/<int:company_id>/', CompanyDetailView.as_view(), name = 'company-detail'),
 
-    path('slot/<int:slot_id>/update', SlotUpdateView.as_view(), name = 'slot-update'),
+    path('slot/<int:slot_id>/update/', SlotUpdateView.as_view(), name = 'slot-update'),
+    path('slot/list/', SlotListView.as_view(), name = 'slot-list'),
 
-    path('address/detail/<int:address_id>', AddressDetailView.as_view(), name = 'address-detail'),
+    path('address/detail/<int:address_id>/', AddressDetailView.as_view(), name = 'address-detail'),
     path('address/create/', AddressCreateView.as_view(), name = 'address-create'),
+    path('address/list/', AddressListView.as_view(), name = 'address-list'),
 
-    path('day/detail/<int:day_id>', DayDetailView.as_view(), name = 'day-detail'),
+    path('day/detail/<int:day_id>/', DayDetailView.as_view(), name = 'day-detail'),
 
     path('signup/', UserCreateAPIView.as_view(), name="signup"),
     path('signin/',obtain_jwt_token, name="signin"),

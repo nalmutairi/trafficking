@@ -44,6 +44,7 @@ from .serializers import (
 	CompanyListSerializer,
 	CompanyDetailSerializer, 
 
+	SlotListSerializer,
 	SlotDetailSerializer,
 	SlotCreateSerializer,
 
@@ -51,6 +52,7 @@ from .serializers import (
 
 	AddressDetailSerializer,
 	AddressCreateSerializer,
+	AddressListSerializer,
 
 
 	)
@@ -89,6 +91,20 @@ class SlotUpdateView(RetrieveUpdateAPIView):
 
 	def perform_update(self, serializer):
 		serializer.save(user = self.request.user)
+
+class SlotListView(ListAPIView):
+	serializer_class = SlotListSerializer
+
+	def get_queryset(self):
+		user = self.request.user
+		return Slot.objects.filter(user = user)
+
+class AddressListView(ListAPIView):
+	serializer_class = AddressListSerializer
+
+	def get_queryset(self):
+		user = self.request.user
+		return Address.objects.filter(user = user)
 
 
 class AddressDetailView(RetrieveAPIView):

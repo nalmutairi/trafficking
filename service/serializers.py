@@ -41,6 +41,15 @@ class CompanyListSerializer(serializers.ModelSerializer):
 		return obj.category.name
 
 
+class SlotListSerializer(serializers.ModelSerializer):
+	date = serializers.SerializerMethodField()
+	class Meta:
+		model = Slot
+		exclude = ['day',]
+
+	def get_date(self, obj):
+		return obj.day.name
+
 class SlotDetailSerializer(serializers.ModelSerializer):
 	date = serializers.SerializerMethodField()
 	class Meta:
@@ -73,7 +82,7 @@ class AddressDetailSerializer(serializers.ModelSerializer):
 class SlotCreateSerializer(serializers.ModelSerializer):
 	class Meta: 
 		model = Slot
-		exclude = ['user', ]
+		fields = '__all__'
 
 
 class AddressCreateSerializer(serializers.ModelSerializer):
@@ -81,18 +90,22 @@ class AddressCreateSerializer(serializers.ModelSerializer):
 		model = Address
 		exclude = ['user', ]
 
-
+class AddressListSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Address
+		fields = '__all__'
 
 class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
-        fields = ['username', 'password']
+        fields = ['username', 'password', 'first_name', 'last_name', 'email']
 
     def create(self, validated_data):
         username = validated_data['username']
         password = validated_data['password']
+        email = validate_data['email']
         new_user = User(username=username)
         new_user.set_password(password)
         new_user.save()
