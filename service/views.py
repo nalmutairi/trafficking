@@ -125,6 +125,20 @@ class AddressCreateView(CreateAPIView):
 	def perform_create(self, serializer):
 		serializer.save(user = self.request.user)
 
+class AddressUpdateView(RetrieveUpdateAPIView):
+	queryset = Address.objects.all()
+	serializer_class = AddressCreateSerializer
+	perission_classes = [IsAuthenticated]
+	lookup_field = 'id'
+	lookup_url_kwarg = 'address_id'
+
+class AddressDeleteView(DestroyAPIView):
+	queryset = Address.objects.all()
+	serializer_class = AddressCreateSerializer
+	permission_classes = [IsAuthenticated]
+	lookup_field = 'id'
+	lookup_url_kwarg = 'address_id'
+
 
 class UserCreateAPIView(CreateAPIView):
     serializer_class = UserCreateSerializer

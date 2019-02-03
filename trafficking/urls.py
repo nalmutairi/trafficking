@@ -35,6 +35,9 @@ from service.views import (
     AddressDetailView,
     AddressCreateView,
     AddressListView,
+    AddressUpdateView,
+    AddressDeleteView,
+
 
     DayDetailView,
 
@@ -57,6 +60,8 @@ urlpatterns = [
     path('address/detail/<int:address_id>/', AddressDetailView.as_view(), name = 'address-detail'),
     path('address/create/', AddressCreateView.as_view(), name = 'address-create'),
     path('address/list/', AddressListView.as_view(), name = 'address-list'),
+    path('address/<int:address_id>/update/', AddressUpdateView.as_view(), name = 'address-update'),
+    path('address/<int:address_id>/delete/', AddressDeleteView.as_view(), name = 'address-delete'),
 
     path('day/detail/<int:day_id>/', DayDetailView.as_view(), name = 'day-detail'),
 
