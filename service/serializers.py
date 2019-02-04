@@ -84,6 +84,10 @@ class SlotCreateSerializer(serializers.ModelSerializer):
 		model = Slot
 		fields = '__all__'
 
+class SlotUpdateSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Slot
+		fields = ['user',]
 
 class AddressCreateSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -106,7 +110,9 @@ class UserCreateSerializer(serializers.ModelSerializer):
         username = validated_data['username']
         password = validated_data['password']
         email = validated_data['email']
-        new_user = User(username=username)
+        first_name = validated_data['first_name']
+        last_name = validated_data['last_name']
+        new_user = User(username=username, email= email, first_name = first_name, last_name = last_name)
         new_user.set_password(password)
         new_user.save()
         return validated_data

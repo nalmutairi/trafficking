@@ -47,6 +47,7 @@ from .serializers import (
 	SlotListSerializer,
 	SlotDetailSerializer,
 	SlotCreateSerializer,
+	SlotUpdateSerializer,
 
 	DayDetailSerializer,
 
@@ -84,13 +85,11 @@ class DayDetailView(RetrieveAPIView):
 
 class SlotUpdateView(RetrieveUpdateAPIView):
 	queryset = Slot.objects.all()
-	serializer_class = SlotCreateSerializer
+	serializer_class = SlotUpdateSerializer
 	permission_classes = [AllowAny]
 	lookup_field = 'id'
 	lookup_url_kwarg = 'slot_id'
 
-	def perform_update(self, serializer):
-		serializer.save(user = self.request.user)
 
 class SlotListView(ListAPIView):
 	serializer_class = SlotListSerializer
