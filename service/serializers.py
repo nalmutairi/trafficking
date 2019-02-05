@@ -60,14 +60,11 @@ class SlotDetailSerializer(serializers.ModelSerializer):
 		return obj.day.name
 
 class DayDetailSerializer(serializers.ModelSerializer):
-	company = serializers.SerializerMethodField()
 	slots = SlotDetailSerializer(many=True)
 	class Meta:
 		model = Day
-		exclude = ['company',]
+		fields = '__all__'
 
-	def get_company(self , obj):
-		return obj.company.name
 
 class CompanyDetailSerializer(serializers.ModelSerializer):
 	days = DayDetailSerializer(many = True)
