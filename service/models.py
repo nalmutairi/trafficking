@@ -26,6 +26,7 @@ class Day(models.Model):
 	company = models.ForeignKey(Company, on_delete= models.CASCADE, related_name = 'days')
 
 
+
 class Slot(models.Model):
 	user = models.ForeignKey(User, on_delete = models.CASCADE, related_name = 'appointments', null=True, blank=True)
 	day = models.ForeignKey(Day, on_delete= models.CASCADE, related_name='slots')
