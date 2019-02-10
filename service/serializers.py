@@ -43,6 +43,9 @@ class CompanyListSerializer(serializers.ModelSerializer):
 
 class SlotListSerializer(serializers.ModelSerializer):
 	date = serializers.SerializerMethodField()
+	companyname = serializers.SerializerMethodField()
+	companyprice = serializers.SerializerMethodField()
+
 	class Meta:
 		model = Slot
 		exclude = ['day',]
@@ -50,14 +53,24 @@ class SlotListSerializer(serializers.ModelSerializer):
 	def get_date(self, obj):
 		return obj.day.name
 
+	def get_companyname(self, obj):
+		return obj.day.company.name
+
+	def get_companyprice(self, obj):
+		return obj.day.company.rate
+
 class SlotDetailSerializer(serializers.ModelSerializer):
 	date = serializers.SerializerMethodField()
+	companyprice = serializers.SerializerMethodField()
 	class Meta:
 		model = Slot
 		exclude = ['day' ,]
 
 	def get_date(self, obj):
 		return obj.day.name
+
+	def get_companyprice(self, obj):
+		return obj.day.company.rate
 
 class DayDetailSerializer(serializers.ModelSerializer):
 	slots = SlotDetailSerializer(many=True)
@@ -88,7 +101,7 @@ class SlotCreateSerializer(serializers.ModelSerializer):
 class SlotUpdateSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Slot
-		fields = ['user',]
+		fields = ['user', 'address', 'status']
 
 class AddressCreateSerializer(serializers.ModelSerializer):
 	class Meta:
